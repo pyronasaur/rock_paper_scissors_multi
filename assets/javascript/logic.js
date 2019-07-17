@@ -44,13 +44,10 @@ $(document).ready(function(){
     // Firebase watcher for opponent guess
     database.ref(opponent + "/guess").on("value", function(snapshot) {
         // storing the snapshot.val() in a variable for convenience and logging the last user's data
-        var sv = snapshot.val();
-        console.log(sv);
+        opponentGuess = snapshot.val();
+        console.log(opponentGuess);
 
-        // Console.logging the last user's data
-        opponentGuess = sv;
-
-        if(opponentGuess !== ""){
+        if((userGuess === "r") || (userGuess === "p") || (userGuess === "s")) {
             play(userGuess);
         }
 
@@ -66,62 +63,90 @@ $(document).ready(function(){
             play(event.key);
         }
     };
+    
 
     function play(keyPress){
         // Determines which key was pressed.
         userGuess = keyPress;
 
+        userChoiceText.textContent = "You chose: " + userGuess;
+        
         database.ref(player).set({
             guess: userGuess,
             wins: wins,
             losses: losses,
             ties: ties
-        }).then(function() {
+        })
+        .then(function() {
             console.log(userGuess);
             console.log('Synchronization succeeded');
-          })
-          .catch(function(error) {
+        })
+        .catch(function(error) {
             console.log('Synchronization failed');
-          });
+        });
 
-        // Reworked our code from last step to use "else if" instead of lots of if statements.
-        if(opponentGuess !== ""){
-            // This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
-            //if ((userGuess === "r") || (userGuess === "p") || (userGuess === "s")) {
+        if ((opponentGuess === "r") || (opponentGuess === "p") || (opponentGuess === "s")) {                
 
-                if ((userGuess === "r" && opponentGuess === "s") ||
-                (userGuess === "s" && opponentGuess === "p") || 
-                (userGuess === "p" && opponentGuess === "r")) {
-                wins++;
-                } else if (userGuess === opponentGuess) {
-                ties++;
-                } else {
-                losses++;
-                }
-
-                // Hide the directions
-                directionsText.textContent = "";
-
-                // Display the user and computer guesses, and wins/losses/ties.
-                userChoiceText.textContent = "You chose: " + userGuess;
-                opponentChoiceText.textContent = "Your opponent chose: " + opponentGuess;
-                winsText.textContent = "wins: " + wins;
-                lossesText.textContent = "losses: " + losses;
-                tiesText.textContent = "ties: " + ties;
-
-                //reset opponents input value after complete
-                database.ref(opponent).set({
-                    guess: "",
-                    wins: wins,
-                    losses: losses,
-                    ties: ties
-                    });
-            //}
+            battle(userGuess, opponentGuess);                
         }
+        
         else{
             opponentChoiceText.textContent = "Waiting for opponent to chose their weapon..";
             console.log("no input from opponent, checking again..");
             //play(userGuess);
+
         }
+    }
+
+    function battle(u, o) {
+        if ((u === "r" && o === "s") ||
+            (u === "s" && o === "p") || 
+            (u === "p" && o === "r")) {
+            wins++;
+            } else if (u === o) {
+            ties++;
+            } else {
+            losses++;
+            }
+
+            // Hide the directions
+            directionsText.textContent = "";
+
+            // Display the user and computer guesses, and wins/losses/ties.
+            
+            opponentChoiceText.textContent = "Your opponent chose: " + opponentGuess;
+            winsText.textContent = "wins: " + wins;
+            lossesText.textContent = "losses: " + losses;
+            tiesText.textContent = "ties: " + ties;
+
+            //reset input values after complete
+            resetPlayerChoices();
+    }
+
+    function resetPlayerChoices(){
+
+        
+        //reset opponents input value after complete
+        database.ref(opponent + "/guess").set("");
+
+        database.ref(player).set({
+            guess: "",
+            wins: wins,
+            losses: losses,
+            ties: ties
+        });
+
+        database.ref(opponent + "/guess").once("value", function(snapshot)
+        {
+            opponentGuess = snapshot.val();
+            console.log("opponentGuess reset to: " + opponentGuess);
+        });
+        
+        database.ref(player + "/guess").on("value", function(snapshot) 
+        {
+            userGuess = snapshot.val();
+            console.log("opponentGuess reset to: " + userGuess);
+        });
+        
     }
 });
