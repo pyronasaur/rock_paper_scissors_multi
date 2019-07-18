@@ -35,14 +35,16 @@ $(document).ready(function(){
             guess: "",
             wins: 0,
             losses: 0,
-            ties: 0
+            ties: 0,
+            msg: ""
         });
 
         database.ref("player2").set({
             guess: "",
             wins: 0,
             losses: 0,
-            ties: 0
+            ties: 0,
+            msg: ""
         });
     }
 

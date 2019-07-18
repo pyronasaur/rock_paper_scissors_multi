@@ -15,14 +15,41 @@
 
 <body>
 
-  <div>
-    <p id="directions-text">Press r, p or s to start playing!</p>
-    <p id="userchoice-text"></p>
-    <p id="opponentchoice-text"></p>
-    <p id="wins-text"></p>
-    <p id="losses-text"></p>
-    <p id="ties-text"></p>
-  </div>
+  <div class="container">
+      <div class="row">
+        <div>
+          <span id="directions-text">Press r, p or s to start playing!</span>
+          <span id="userchoice-text"></span>
+          <span id="opponentchoice-text"></span>
+          <span id="wins-text"></span>
+          <span id="losses-text"></span>
+          <span id="ties-text"></span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3"></div>
+          <div class="col-sm">
+            <div class="card">
+              <div class="card-body" id="chatWin">
+              </div>
+            </div>
+          </div>
+        <div class="col-sm-3"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3"></div>
+          <div class="col-sm">
+            <div class="form-group">
+              <label for="chatArea">Talk some trash</label>
+              <textarea class="form-control" id="chatArea" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="chat-btn">Submit</button>
+          </div>
+        <div class="col-sm-3"></div>
+      </div>
+</div>
 
 <script src="assets/javascript/firebaseConf.js"></script>
 <script src="assets/javascript/logic.js"></script>

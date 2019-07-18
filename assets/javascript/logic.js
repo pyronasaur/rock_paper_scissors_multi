@@ -70,7 +70,7 @@ $(document).ready(function(){
         userGuess = keyPress;
 
         userChoiceText.textContent = "You chose: " + userGuess;
-        
+
         database.ref(player).set({
             guess: userGuess,
             wins: wins,
@@ -149,4 +149,48 @@ $(document).ready(function(){
         });
         
     }
+
+
+    // #SECTION# Chat window logic #SECTION#
+    $("#chat-btn").on("click", function(){
+        event.preventDefault();
+        
+        var chatCard = $("#chatWin");
+        var chatArea = $("#chatArea");
+
+        var newP = $("<p>");
+        newP.css("color","green");
+        newP.css("margin-top","0px");
+        newP.css("margin-bottom","0px");
+        newP.text(chatArea.val());
+
+        database.ref(player + "/msg").set(chatArea.val());
+
+        chatCard.append(newP);
+    });
+
+    // Firebase watcher for opponent guess
+    database.ref(opponent + "/msg").on("value", function(snapshot) {
+
+        var opponentMsg = snapshot.val();
+        console.log(opponentMsg);
+
+        if(opponentMsg){
+
+            var chatCard = $("#chatWin");
+            var chatArea = $("#chatArea");
+
+            var newP = $("<p>");
+            newP.css("color","red");
+            newP.css("margin-top","0px");
+            newP.css("margin-bottom","0px");
+            newP.css("text-align","right");
+            newP.text(opponentMsg);
+
+            chatCard.append(newP);
+        }
+        // Handle the errors
+        }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
 });
