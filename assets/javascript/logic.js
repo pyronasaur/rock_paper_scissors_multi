@@ -59,8 +59,10 @@ $(document).ready(function(){
 
     // This function is run whenever the user presses a key.
     document.onkeyup = function(event) {
-        if((event.key === "r") || (event.key === "p") || (event.key === "s")) {
-            play(event.key);
+        if(!$("#chatArea").is(":focus")){
+            if((event.key === "r") || (event.key === "p") || (event.key === "s")) {
+                play(event.key);
+            }
         }
     };
     
