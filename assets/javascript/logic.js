@@ -161,14 +161,17 @@ $(document).ready(function(){
         var chatArea = $("#chatArea");
 
         var newP = $("<p>");
-        newP.css("color","green");
+        newP.css("color","blue");
+        newP.css("fontWeight","bold");
         newP.css("margin-top","0px");
         newP.css("margin-bottom","0px");
+        newP.css("text-align","right");
         newP.text(chatArea.val());
 
         database.ref(player + "/msg").set(chatArea.val());
 
         chatCard.append(newP);
+        chatArea.val("");
     });
 
     // Firebase watcher for opponent guess
@@ -184,9 +187,9 @@ $(document).ready(function(){
 
             var newP = $("<p>");
             newP.css("color","red");
+            newP.css("fontWeight","bold");
             newP.css("margin-top","0px");
             newP.css("margin-bottom","0px");
-            newP.css("text-align","right");
             newP.text(opponentMsg);
 
             chatCard.append(newP);
@@ -194,5 +197,29 @@ $(document).ready(function(){
         // Handle the errors
         }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
+    });
+
+    //extra listener for enter key on submit button
+    $("#chatArea").keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            event.preventDefault();
+            
+            var chatCard = $("#chatWin");
+            var chatArea = $("#chatArea");
+
+            var newP = $("<p>");
+            newP.css("color","blue");
+            newP.css("fontWeight","bold");
+            newP.css("margin-top","0px");
+            newP.css("margin-bottom","0px");
+            newP.css("text-align","right");
+            newP.text(chatArea.val());
+
+            database.ref(player + "/msg").set(chatArea.val());
+
+            chatCard.append(newP);
+            chatArea.val("");
+        }
     });
 });
