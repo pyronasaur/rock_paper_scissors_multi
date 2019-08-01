@@ -13,3 +13,6 @@ __SETUP__
   2. Press the button to choose either player1 or player2
   3. press r p or s for both players to test
   4. count your victories against yourself! (and losses.. and ties..)
+  
+  Check it out! (navigate to this site in two windows and select p1 and p2 to play against yourself)
+  https://pyronasaur.github.io/rock_paper_scissors_multi/
